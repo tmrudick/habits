@@ -59,7 +59,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void onLoginFlowComplete() {
-        Toast.makeText(this, "Login!", Toast.LENGTH_SHORT).show();
+        if (!RegistrationService.isRunning()) {
+            Intent service = new Intent(this, RegistrationService.class);
+            startService(service);
+        }
     }
 
     @Override
