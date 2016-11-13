@@ -15,6 +15,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,12 +45,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance((
+                (HabitsApplication) getApplication()).getFirebaseApp());
         firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser == null) {
             startLoginFlow();
         } else {
-            // Signed in
+            if (!RegistrationService.isRunning()) {
+                Intent service = new Intent(this, RegistrationService.class);
+                startService(service);
+            }
         }
     }
 

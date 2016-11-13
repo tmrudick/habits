@@ -27,7 +27,7 @@ public class RegistrationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!isRunning()) {
             // Don't start the service if we don't have an account.
-            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance(((HabitsApplication) getApplication()).getFirebaseApp());
             if (firebaseAuth.getCurrentUser() == null) {
                 return START_NOT_STICKY;
             }
